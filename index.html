@@ -1,420 +1,365 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Descubra o Dia da Sua Morte</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Unica+One&display=swap');
-
-  * {
-    box-sizing: border-box;
-  }
-  body, html {
-    margin: 0; padding: 0; height: 100%;
-    background: #000 url('https://img.freepik.com/fotos-premium/arvore-preta-seca-sem-folhas-com-ceu-vermelho-sangue-assustador-fundo-de-natureza-de-arvore-de-horror-assustador-para-o-halloween_696486-50.jpg') no-repeat center center fixed;
-    background-size: cover;
-    font-family: 'Unica One', cursive;
-    color: #ddd;
-    overflow-x: hidden;
-  }
-  #app {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background: rgba(0,0,0,0.75);
-  }
-  h1 {
-    font-size: 2.8rem;
-    margin-bottom: 15px;
-    text-align: center;
-    text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000;
-  }
-  h2 {
-    font-size: 1.6rem;
-    margin-bottom: 12px;
-    text-align: center;
-    color: #f44336;
-  }
-  .screen {
-    width: 100%;
-    max-width: 420px;
-    background: rgba(20,20,20,0.85);
-    border-radius: 12px;
-    padding: 25px 30px 40px 30px;
-    box-shadow: 0 0 25px #ff0000aa;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-  }
-  .screen.active {
-    display: flex;
-  }
-  .btn {
-    margin-top: 15px;
-    background-color: #b71c1c;
-    border: none;
-    color: white;
-    padding: 14px 0;
-    font-size: 1.3rem;
-    width: 100%;
-    border-radius: 8px;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    box-shadow: 0 0 10px #ff0000bb;
-    transition: background-color 0.3s ease;
-  }
-  .btn:hover {
-    background-color: #e53935;
-  }
-  .question {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-  .options {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  .options button {
-    flex: 1;
-    background-color: #330000;
-    border: 2px solid #f44336;
-    color: #f44336;
-    padding: 10px 0;
-    font-size: 1.1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  .options button.selected {
-    background-color: #f44336;
-    color: #fff;
-  }
-  input[type="text"],
-  input[type="tel"] {
-    width: 100%;
-    padding: 12px 15px;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    border: 2px solid #f44336;
-    background: #220000;
-    color: #eee;
-    outline: none;
-    box-shadow: inset 0 0 6px #ff0000aa;
-  }
-  input::placeholder {
-    color: #ff9999;
-  }
-  #ad-space {
-    width: 100%;
-    max-width: 420px;
-    height: 80px;
-    margin: 25px auto 0 auto;
-    background: #111;
-    border-radius: 8px;
-    color: #777;
-    font-size: 1.1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 12px #ff000077 inset;
-  }
-  #result img {
-    width: 140px;
-    margin-bottom: 15px;
-    filter: drop-shadow(0 0 5px #f44336);
-  }
-  #result-text {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
-    text-align: center;
-    line-height: 1.4;
-  }
-  #result-details {
-    font-size: 1.1rem;
-    color: #ffa6a6;
-    text-align: center;
-    margin-bottom: 25px;
-  }
-
-  /* Responsividade */
-  @media (max-width: 450px) {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Descubra o Dia da Sua Morte</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Playfair+Display&display=swap');
+    /* Fonte elegante e misteriosa */
+    body {
+      margin: 0; padding: 0;
+      background: url('https://img.freepik.com/fotos-premium/arvore-preta-seca-sem-folhas-com-ceu-vermelho-sangue-assustador-fundo-de-natureza-de-arvore-de-horror-assustador-para-o-halloween_696486-50.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Playfair Display', serif;
+      color: #eee;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+    }
+    #container {
+      background: rgba(0, 0, 0, 0.85);
+      padding: 20px 30px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 95%;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    }
     h1 {
-      font-size: 2rem;
+      font-family: 'Cinzel', serif;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #ff3b3b;
+      text-shadow: 0 0 8px #ff0000;
     }
-    h2 {
-      font-size: 1.3rem;
+    .question {
+      margin-bottom: 25px;
     }
-    .btn {
+    .question p {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+    button.option {
+      background-color: transparent;
+      border: 2px solid #ff3b3b;
+      color: #ff3b3b;
+      font-size: 1rem;
+      padding: 10px 18px;
+      margin: 0 6px 10px 0;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 70px;
+    }
+    button.option.selected, button.option:hover {
+      background-color: #ff3b3b;
+      color: #000;
+    }
+    input[type="text"], input[type="tel"] {
+      width: 100%;
+      padding: 10px;
       font-size: 1.1rem;
+      border-radius: 6px;
+      border: 2px solid #ff3b3b;
+      background: #111;
+      color: #eee;
+      box-sizing: border-box;
     }
-  }
-</style>
+    #next-btn {
+      background-color: #ff3b3b;
+      color: black;
+      border: none;
+      padding: 12px 0;
+      width: 100%;
+      font-size: 1.25rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      display: none;
+      font-weight: bold;
+      letter-spacing: 1.1px;
+    }
+    #next-btn:hover {
+      background-color: #e63636;
+    }
+    #result {
+      display: none;
+      margin-top: 15px;
+      font-size: 1.15rem;
+      line-height: 1.4;
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+      color: #ff5959;
+    }
+    #result strong {
+      color: #fff;
+    }
+    #ad-space {
+      margin-top: 25px;
+      height: 90px;
+      background: #000;
+      color: #555;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      font-size: 1.1rem;
+      border-radius: 10px;
+    }
+    /* Responsivo para celular */
+    @media (max-width: 480px) {
+      #container {
+        max-width: 90vw;
+        padding: 15px 20px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      button.option {
+        min-width: 60px;
+        margin-bottom: 8px;
+      }
+      #next-btn {
+        font-size: 1.1rem;
+      }
+      #result {
+        font-size: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div id="container">
+    <h1>Descubra o Dia da Sua Morte</h1>
 
-<div id="app">
-  <div id="intro-screen" class="screen active">
-    <h1>Descubra o dia da sua morte</h1>
-    <p style="text-align:center; color:#ff6666; margin-bottom: 25px; font-weight:700;">
-      Será que você sabe quando vai morrer? <br />
-      Responda as perguntas e descubra seu destino.
-    </p>
-    <button class="btn" id="start-btn">Começar</button>
+    <!-- Perguntas: Exemplo igual ao último código -->
+    <div id="step1" class="question">
+      <p>Você fuma?</p>
+      <button class="option" data-value="sim">Sim</button>
+      <button class="option" data-value="nao">Não</button>
+      <button class="option" data-value="as-vezes">Às vezes</button>
+    </div>
+
+    <div id="step2" class="question" style="display:none;">
+      <p>Você já teve alguma doença grave? (ex: diabetes, pressão alta)</p>
+      <button class="option" data-value="sim">Sim</button>
+      <button class="option" data-value="nao">Não</button>
+    </div>
+
+    <div id="step3" class="question" style="display:none;">
+      <p>Você pratica exercícios regularmente?</p>
+      <button class="option" data-value="sim">Sim</button>
+      <button class="option" data-value="nao">Não</button>
+    </div>
+
+    <div id="step4" class="question" style="display:none;">
+      <p>Qual o seu nome?</p>
+      <input type="text" id="name" placeholder="Digite seu nome" autocomplete="off" />
+    </div>
+
+    <div id="step5" class="question" style="display:none;">
+      <p>Qual a sua data de nascimento?</p>
+      <input type="tel" id="birthdate" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off" />
+    </div>
+
+    <button id="next-btn">Próximo</button>
+
+    <div id="result"></div>
+
+    <div id="ad-space">Anúncio aqui</div>
   </div>
 
-  <div id="questions" class="screen">
-    <!-- Perguntas serão aqui -->
-    <div class="question" data-step="1">
-      <h2>Você fuma?</h2>
-      <div class="options">
-        <button data-value="sim">Sim</button>
-        <button data-value="não">Não</button>
-        <button data-value="às vezes">Às vezes</button>
-      </div>
-    </div>
+  <script>
+    const steps = ['step1', 'step2', 'step3', 'step4', 'step5'];
+    let currentStep = 0;
+    const answers = {};
+    const usedNames = JSON.parse(localStorage.getItem('usedNames') || '[]');
 
-    <div class="question" data-step="2">
-      <h2>Você consome álcool frequentemente?</h2>
-      <div class="options">
-        <button data-value="sim">Sim</button>
-        <button data-value="não">Não</button>
-        <button data-value="às vezes">Às vezes</button>
-      </div>
-    </div>
+    const nextBtn = document.getElementById('next-btn');
+    const resultDiv = document.getElementById('result');
 
-    <div class="question" data-step="3">
-      <h2>Você pratica exercícios regularmente?</h2>
-      <div class="options">
-        <button data-value="sim">Sim</button>
-        <button data-value="não">Não</button>
-        <button data-value="às vezes">Às vezes</button>
-      </div>
-    </div>
+    function showStep(index) {
+      steps.forEach((stepId, i) => {
+        document.getElementById(stepId).style.display = i === index ? 'block' : 'none';
+      });
+      nextBtn.style.display = 'none'; // Esconde botão até escolher opção
+      resultDiv.style.display = 'none';
+    }
 
-    <div class="question" data-step="4">
-      <h2>Já teve alguma doença grave, como diabetes ou pressão alta?</h2>
-      <div class="options">
-        <button data-value="sim">Sim</button>
-        <button data-value="não">Não</button>
-      </div>
-    </div>
+    // Exibir passo inicial
+    showStep(currentStep);
 
-    <div class="question" data-step="5">
-      <h2>Alguém da sua família tem histórico de doenças cardíacas?</h2>
-      <div class="options">
-        <button data-value="sim">Sim</button>
-        <button data-value="não">Não</button>
-      </div>
-    </div>
-
-    <div class="question" data-step="6">
-      <h2>Qual o seu nome?</h2>
-      <input id="name" type="text" placeholder="Digite seu nome" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" />
-    </div>
-
-    <div class="question" data-step="7">
-      <h2>Digite sua data de nascimento</h2>
-      <input id="birthdate" type="tel" placeholder="dd/mm/aaaa" inputmode="numeric" maxlength="10" autocomplete="off" />
-    </div>
-
-    <button id="next-btn" class="btn" style="display:none;">Próximo</button>
-  </div>
-
-  <div id="result" class="screen">
-    <img id="death-img-bottom" src="https://segredosdomundo.r7.com/wp-content/uploads/2021/12/10-anjos-da-morte-mais-conhecidos-na-biblia-e-na-mitologia-e1639504697683.jpg" alt="Anjo da Morte" />
-    <h2>Seu destino está traçado</h2>
-    <p id="result-text"></p>
-    <p id="result-details"></p>
-    <button id="restart-btn" class="btn">Refazer</button>
-  </div>
-</div>
-
-<div id="ad-space">Anúncio aqui</div>
-
-<script>
-  const introScreen = document.getElementById('intro-screen');
-  const startBtn = document.getElementById('start-btn');
-  const questions = document.getElementById('questions');
-  const nextBtn = document.getElementById('next-btn');
-  const resultDiv = document.getElementById('result');
-  const restartBtn = document.getElementById('restart-btn');
-  const resultText = document.getElementById('result-text');
-  const resultDetails = document.getElementById('result-details');
-  const questionDivs = [...document.querySelectorAll('.question')];
-  let currentStep = 1;
-  let answers = {};
-  let usedNames = JSON.parse(localStorage.getItem('usedNames') || '[]');
-
-  // Função para mostrar pergunta certa e botão Próximo quando a resposta for válida
-  function showStep(step) {
-    currentStep = step;
-    questionDivs.forEach(div => {
-      div.style.display = div.getAttribute('data-step') == step ? 'block' : 'none';
-    });
-    nextBtn.style.display = 'none';
-
-    // Se for pergunta de texto ou data (steps 6 e 7), mostra botão só quando tem texto válido
-    if (step >= 6) {
-      const input = questionDivs.find(div => div.getAttribute('data-step') == step).querySelector('input');
-      if(input.value.trim().length > 0) {
+    // Botões de opção
+    document.querySelectorAll('.option').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const stepId = steps[currentStep];
+        answers[stepId] = btn.getAttribute('data-value');
+        // Marca selecionado visualmente
+        btn.parentElement.querySelectorAll('button.option').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
         nextBtn.style.display = 'block';
-      }
-    }
-  }
-
-  // Start
-  startBtn.onclick = () => {
-    introScreen.classList.remove('active');
-    introScreen.classList.add('hidden');
-    questions.classList.add('active');
-    showStep(1);
-  };
-
-  // Botões opções selecionáveis
-  document.querySelectorAll('.options button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const parent = btn.parentElement;
-      parent.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      nextBtn.style.display = 'block';
+      });
     });
-  });
 
-  // Botão próximo
-  nextBtn.onclick = () => {
-    const activeQuestion = questionDivs.find(div => div.style.display === 'block');
-    if (!activeQuestion) return;
+    // Inputs nome e data com botão próximo
+    const inputName = document.getElementById('name');
+    const inputBirth = document.getElementById('birthdate');
 
-    const step = parseInt(activeQuestion.getAttribute('data-step'));
-
-    if (step <= 5) {
-      const selectedBtn = activeQuestion.querySelector('button.selected');
-      if (!selectedBtn) {
-        alert('Por favor, selecione uma opção.');
-        return;
-      }
-      answers['q' + step] = selectedBtn.getAttribute('data-value');
-    } else if (step === 6) {
-      const nameVal = document.getElementById('name').value.trim();
-      if (nameVal.length < 3) {
-        alert('Digite um nome válido com pelo menos 3 caracteres.');
-        return;
-      }
-      if (usedNames.includes(nameVal.toLowerCase())) {
-        alert('Você já consultou com esse nome, use outro para consultar novamente.');
-        return;
-      }
-      answers.name = nameVal;
-    } else if (step === 7) {
-      const bdate = document.getElementById('birthdate').value.trim();
-      if (!/^\d{2}\/\d{2}\/\d{4}$/.test(bdate)) {
-        alert('Digite uma data válida no formato dd/mm/aaaa.');
-        return;
-      }
-      answers.birthdate = bdate;
-    }
-
-    if (step < questionDivs.length) {
-      showStep(step + 1);
-    } else {
-      questions.classList.remove('active');
-      questions.classList.add('hidden');
-      showResult();
-    }
-  };
-
-  // Mostra resultado
-  function gerarCausa(ans) {
-    if (ans.q1 === 'sim' && ans.q2 === 'sim') return "Infarto causado por complicações do tabagismo e álcool.";
-    if (ans.q4 === 'sim') return "Complicações de diabetes ou pressão alta.";
-    if (ans.q5 === 'sim') return "Doença cardíaca hereditária.";
-    if (ans.q3 === 'não') return "Doença causada por sedentarismo.";
-    return "Causa natural relacionada ao envelhecimento.";
-  }
-
-  function calcularAnoMorte(birthdate, causa) {
-    const parts = birthdate.split('/');
-    const dia = parseInt(parts[0], 10);
-    const mes = parseInt(parts[1], 10) - 1;
-    const anoNasc = parseInt(parts[2], 10);
-
-    const hoje = new Date();
-    let idade = hoje.getFullYear() - anoNasc;
-    if (hoje.getMonth() < mes || (hoje.getMonth() === mes && hoje.getDate() < dia)) {
-      idade--;
-    }
-
-    let baseVida = 75;
-
-    if (causa.includes('Infarto')) baseVida = 60;
-    else if (causa.includes('diabetes') || causa.includes('pressão')) baseVida = 65;
-    else if (causa.includes('Doença cardíaca')) baseVida = 55;
-    else if (causa.includes('sedentarismo')) baseVida = 63;
-
-    const anosRestantes = baseVida - idade;
-    const anoMorte = hoje.getFullYear() + (anosRestantes > 0 ? anosRestantes : 1);
-
-    return { idade: baseVida, ano: anoMorte };
-  }
-
-  function showResult() {
-    const causa = gerarCausa(answers);
-    const morteData = calcularAnoMorte(answers.birthdate, causa);
-
-    resultText.textContent = `${answers.name}, seu fim acontecerá exatamente assim: ${causa}`;
-    resultDetails.innerHTML = `Idade que você vai morrer: <strong>${morteData.idade} anos</strong><br> Ano exato da morte: <strong>${morteData.ano}</strong>`;
-
-    resultDiv.classList.add('active');
-    usedNames.push(answers.name.toLowerCase());
-    localStorage.setItem('usedNames', JSON.stringify(usedNames));
-  }
-
-  // Reiniciar
-  restartBtn.onclick = () => {
-    resultDiv.classList.remove('active');
-    introScreen.classList.add('active');
-    answers = {};
-    currentStep = 1;
-
-    // reset perguntas
-    questionDivs.forEach(div => {
-      div.style.display = 'none';
-      const btns = div.querySelectorAll('button.selected');
-      btns.forEach(b => b.classList.remove('selected'));
-      const input = div.querySelector('input');
-      if (input) input.value = '';
+    inputName.addEventListener('input', () => {
+      nextBtn.style.display = inputName.value.trim() ? 'block' : 'none';
     });
-    nextBtn.style.display = 'none';
-  };
 
-  // Controle input data com máscara simples dd/mm/aaaa
-  const birthInput = document.getElementById('birthdate');
-  birthInput.addEventListener('input', e => {
-    let val = e.target.value;
-    val = val.replace(/\D/g, '');
-    if(val.length > 8) val = val.slice(0,8);
-    if(val.length > 4) val = val.slice(0,2) + '/' + val.slice(2,4) + '/' + val.slice(4);
-    else if(val.length > 2) val = val.slice(0,2) + '/' + val.slice(2);
-    e.target.value = val;
-  });
+    // Máscara simples para data dd/mm/aaaa e teclado numérico
+    inputBirth.addEventListener('input', e => {
+      let val = e.target.value.replace(/\D/g, '');
+      if(val.length > 8) val = val.slice(0,8);
+      if(val.length > 4) val = val.slice(0,2) + '/' + val.slice(2,4) + '/' + val.slice(4);
+      else if(val.length > 2) val = val.slice(0,2) + '/' + val.slice(2);
+      e.target.value = val;
+      // Exibir botão próximo só se a data estiver completa
+      if(/^\d{2}\/\d{2}\/\d{4}$/.test(e.target.value)) {
+        nextBtn.style.display = 'block';
+      } else {
+        nextBtn.style.display = 'none';
+      }
+    });
 
-  // Mostrar botão Próximo nos inputs de texto/datas conforme digita
-  document.getElementById('name').addEventListener('input', e => {
-    nextBtn.style.display = e.target.value.trim() ? 'block' : 'none';
-  });
-  birthInput.addEventListener('input', e => {
-    nextBtn.style.display = /^\d{2}\/\d{2}\/\d{4}$/.test(e.target.value) ? 'block' : 'none';
-  });
+    // Função para calcular idade com base na data dd/mm/aaaa
+    function calcularIdade(dataNascimento) {
+      const partes = dataNascimento.split('/');
+      if(partes.length !== 3) return 0;
+      const dia = parseInt(partes[0],10);
+      const mes = parseInt(partes[1],10) - 1;
+      const ano = parseInt(partes[2],10);
+      const hoje = new Date();
+      const nascimento = new Date(ano, mes, dia);
+      let idade = hoje.getFullYear() - nascimento.getFullYear();
+      const m = hoje.getMonth() - nascimento.getMonth();
+      if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
+          idade--;
+      }
+      return idade;
+    }
 
-</script>
+    // Próximo passo no clique do botão
+    nextBtn.onclick = () => {
+      // Validar nome repetido
+      if (steps[currentStep] === 'step4') {
+        const nomeDigitado = inputName.value.trim().toLowerCase();
+        if (usedNames.includes(nomeDigitado)) {
+          alert('Você já consultou com esse nome. Use outro nome para consultar novamente.');
+          return;
+        }
+        answers.name = inputName.value.trim();
+      }
+
+      // Salvar resposta dos inputs
+      if (steps[currentStep] === 'step4') {
+        answers.name = inputName.value.trim();
+      } else if (steps[currentStep] === 'step5') {
+        answers.birthdate = inputBirth.value.trim();
+      }
+
+      if(currentStep < steps.length - 1) {
+        currentStep++;
+        showStep(currentStep);
+        // Se for input nome ou data, esconder botão e esperar input
+        if (steps[currentStep] === 'step4') {
+          nextBtn.style.display = 'none';
+        }
+        if (steps[currentStep] === 'step5') {
+          nextBtn.style.display = 'none';
+        }
+      } else {
+        // Último passo: mostrar resultado
+        mostrarResultado();
+      }
+    };
+
+    // Gerar causa da morte (simplificado)
+    function gerarCausa(answers) {
+      // Base simples de causas
+      if (answers.step2 === 'sim' && answers.step1 === 'sim') {
+        return 'Infarto causado por combinação de tabagismo e doença grave.';
+      } else if (answers.step2 === 'sim') {
+        return 'Doença cardíaca causada por pressão alta ou diabetes.';
+      } else if (answers.step3 === 'nao') {
+        return 'Doença causada por sedentarismo e falta de cuidados.';
+      } else if (answers.step1 === 'sim') {
+        return 'Complicações pulmonares devido ao tabagismo.';
+      }
+      return 'Causa natural relacionada à idade e fatores genéticos.';
+    }
+
+    // Gera descrição extra para o final
+    function gerarDescricao(causa) {
+      if (causa.includes('Infarto')) return 'Infarto agudo do miocárdio causado por maus hábitos.';
+      if (causa.includes('Doença cardíaca')) return 'Doença cardíaca crônica decorrente de pressão alta e diabetes.';
+      if (causa.includes('sedentarismo')) return 'Doença causada pela falta de atividade física e má alimentação.';
+      if (causa.includes('tabagismo')) return 'Complicações pulmonares causadas pelo tabagismo.';
+      return 'Causa natural, sem fatores agravantes.';
+    }
+
+    // Cidades próximas fixas
+    const cidades = ['Jaguaribe', 'Jaguaribara', 'Limoeiro', 'Itaiçaba', 'Aracati', 'Morada Nova'];
+
+    // Calcula idade e ano da morte, hora e condição do dia
+    function calcularDadosFinais(birthdate, causa) {
+      const idadeAtual = calcularIdade(birthdate);
+      let baseVida = 70;
+      if(causa.includes('Infarto')) baseVida = 60;
+      else if(causa.includes('Doença cardíaca')) baseVida = 55;
+      else if(causa.includes('sedentarismo')) baseVida = 63;
+      else if(causa.includes('tabagismo')) baseVida = 58;
+
+      let anosRestantes = baseVida - idadeAtual;
+      if (anosRestantes <= 0) anosRestantes = 1;
+      const anoMorte = new Date().getFullYear() + anosRestantes;
+
+      // Escolhe cidade aleatória da lista
+      const cidade = cidades[Math.floor(Math.random() * cidades.length)];
+
+      // Hora da morte aleatória (entre 0 e 23 horas)
+      const hora = Math.floor(Math.random() * 24) + ':00';
+
+      // Condição do dia aleatória
+      const condicoes = ['nublado', 'ensolarado', 'chuvoso', 'de noite', 'tempestuoso', 'com neblina'];
+      const condicao = condicoes[Math.floor(Math.random() * condicoes.length)];
+
+      return { idade: idadeAtual + anosRestantes, ano: anoMorte, cidade, hora, condicao };
+    }
+
+    // Mostrar resultado formatado
+    function mostrarResultado() {
+      const nome = answers.name;
+      const causa = gerarCausa(answers);
+      const descricao = gerarDescricao(causa);
+      const dados = calcularDadosFinais(answers.birthdate, causa);
+
+      // Salva o nome para não repetir consulta
+      usedNames.push(nome.toLowerCase());
+      localStorage.setItem('usedNames', JSON.stringify(usedNames));
+
+      const texto = `
+        <p><strong>${nome}</strong>, seu fim acontecerá exatamente assim:</p>
+        <p>${descricao}</p>
+        <p><strong>Doença causada:</strong> ${causa}</p>
+        <p><strong>Idade que você vai morrer:</strong> ${dados.idade} anos</p>
+        <p><strong>Ano exato da morte:</strong> ${dados.ano}</p>
+        <p><strong>Cidade onde você vai morrer:</strong> ${dados.cidade}</p>
+        <p><strong>Hora exata:</strong> ${dados.hora}</p>
+        <p><strong>Condição do dia:</strong> ${dados.condicao}</p>
+      `;
+
+      document.getElementById('container').style.display = 'none';
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = texto;
+    }
+  </script>
 </body>
 </html>
-
 
