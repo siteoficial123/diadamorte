@@ -1,532 +1,506 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Descubra o Dia da Sua Morte</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Descubra o Dia da Sua Morte</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display&family=Roboto&display=swap');
 
-  <style>
-    /* Reset e básico */
-    * {
-      box-sizing: border-box;
-    }
-    html, body {
-      margin: 0; padding: 0; height: 100%;
-      background: black url('https://img.freepik.com/fotos-premium/arvore-preta-seca-sem-folhas-com-ceu-vermelho-sangue-assustador-fundo-de-natureza-de-arvore-de-horror-assustador-para-o-halloween_696486-50.jpg') no-repeat center center fixed;
-      background-size: cover;
-      font-family: 'Georgia', serif;
-      color: white;
-      overflow-x: hidden;
-      user-select: none;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
+  /* Reset e básico */
+  * {
+    box-sizing: border-box;
+  }
 
-    #ad-space {
-      width: 100%;
-      height: 90px;
-      background: black;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      z-index: 1000;
-      box-shadow: inset 0 0 20px crimson;
-    }
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background: #000;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 
-    #sound-control {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      background: rgba(220,20,60,0.9);
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 28px;
-      color: white;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 15px crimson;
-      z-index: 1001;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-    #sound-control:hover {
-      background-color: crimson;
-    }
+  #container {
+    max-width: 480px;
+    margin: 20px auto 0 auto;
+    background: #111;
+    border-radius: 12px;
+    padding: 25px 20px 80px; /* espaço extra pra anúncio */
+    box-shadow: 0 0 20px #c0392b;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 2.8rem;
+    text-align: center;
+    margin: 0 0 20px 0;
+    color: #f5f5f5;
+    text-shadow: 0 0 6px #c0392b;
+  }
+
+  img#death-img-top, img#death-img-bottom {
+    display: block;
+    max-width: 120px;
+    margin: 0 auto 20px auto;
+    filter: drop-shadow(0 0 8px #c0392b);
+    border-radius: 10px;
+  }
+
+  /* Telas (intro, perguntas, resultado) */
+  .screen {
+    display: none;
+    flex-direction: column;
+  }
+  .screen.active {
+    display: flex;
+  }
+
+  #intro-screen p {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 25px 0;
+    text-align: center;
+    color: #ddd;
+  }
+
+  button, input[type="text"], input[type="tel"] {
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 1.15rem;
+  }
+
+  #start-btn {
+    background-color: #c0392b;
+    color: #fff;
+    padding: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  #start-btn:hover {
+    background-color: #e74c3c;
+  }
+
+  /* Perguntas */
+  .question {
+    margin-bottom: 25px;
+  }
+
+  .question h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 18px;
+    text-align: center;
+    color: #f8f9fa;
+  }
+
+  .options {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .options button {
+    flex: 1;
+    background: #2c3e50;
+    color: #ddd;
+    padding: 14px 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: none;
+  }
+  .options button.selected,
+  .options button:hover {
+    background: #c0392b;
+    color: #fff;
+    box-shadow: 0 0 12px #e74c3c;
+  }
+
+  /* Inputs */
+  input[type="text"], input[type="tel"] {
+    width: 100%;
+    padding: 14px 12px;
+    background: #222;
+    color: #eee;
+    border: 1.5px solid #444;
+    transition: border-color 0.3s ease;
+    letter-spacing: 1px;
+  }
+  input[type="text"]::placeholder,
+  input[type="tel"]::placeholder {
+    color: #999;
+  }
+  input[type="text"]:focus, input[type="tel"]:focus {
+    outline: none;
+    border-color: #c0392b;
+  }
+
+  #next-btn {
+    background-color: #c0392b;
+    color: #fff;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 8px;
+    width: 100%;
+    display: none;
+    transition: background-color 0.3s ease;
+  }
+  #next-btn:hover {
+    background-color: #e74c3c;
+  }
+
+  /* Resultado */
+  #result h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 2.3rem;
+    text-align: center;
+    color: #f5f5f5;
+    margin-bottom: 15px;
+    text-shadow: 0 0 8px #c0392b;
+  }
+
+  #result p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin: 10px 0;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  #restart-btn {
+    background-color: #c0392b;
+    color: #fff;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 8px;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+  }
+  #restart-btn:hover {
+    background-color: #e74c3c;
+  }
+
+  /* Espaço fixo para anúncios */
+  #ad-space {
+    height: 90px;
+    background: #111;
+    max-width: 480px;
+    margin: 0 auto 20px auto;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 90px;
+    font-size: 1.1rem;
+    color: #ccc;
+    font-weight: 600;
+    font-style: italic;
+    box-shadow: 0 0 15px rgba(192,57,43,0.6);
+    flex-shrink: 0;
+  }
+
+  /* Responsividade */
+  @media (max-width: 500px) {
     #container {
-      max-width: 460px;
-      margin: auto;
-      background: rgba(0,0,0,0.85);
-      padding: 30px 30px 60px 30px;
-      border-radius: 14px;
-      box-shadow: 0 0 40px crimson;
-      position: relative;
-      min-height: calc(100vh - 90px - 40px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      z-index: 100;
+      margin: 10px 10px 80px 10px;
+      padding: 20px 15px 70px 15px;
     }
-
     h1 {
-      font-size: 2.8rem;
-      text-align: center;
-      margin-bottom: 28px;
-      text-shadow: 0 0 16px crimson;
-      user-select: none;
+      font-size: 2rem;
     }
-
-    #intro-screen, #questions, #result {
-      user-select: none;
-      flex-grow: 1;
+    .question h2 {
+      font-size: 1.25rem;
     }
-
-    #intro-screen {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    #next-btn, #start-btn, #restart-btn {
+      font-size: 1rem;
+      padding: 12px;
     }
-    #intro-screen p {
-      font-size: 1.4rem;
-      margin-bottom: 42px;
-      line-height: 1.5;
-    }
-    #start-btn {
-      background: crimson;
-      border: none;
-      padding: 24px 0;
-      width: 100%;
-      font-size: 1.9rem;
-      font-weight: 900;
-      border-radius: 14px;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 0 20px crimson;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-    #start-btn:hover {
-      background-color: #b30000;
-    }
-
-    .question {
-      display: none;
-      animation: fadeIn 0.4s ease forwards;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .question.active {
-      display: flex;
-    }
-    .question p {
-      font-size: 1.4rem;
-      margin-bottom: 22px;
-      text-align: center;
-      user-select: none;
-    }
-
-    .options {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 22px;
-    }
-    .options button {
-      flex: 1;
-      margin: 0 12px;
-      padding: 18px 0;
-      background: #330000;
-      border: 2px solid crimson;
-      border-radius: 11px;
-      color: white;
-      font-weight: 700;
-      font-size: 1.3rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      user-select: none;
-      box-shadow: 0 0 6px #660000 inset;
-    }
-    .options button:hover {
-      background-color: crimson;
-    }
-    .options button.selected {
-      background-color: crimson;
-      box-shadow: 0 0 14px #ff0000;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 16px 14px;
-      font-size: 1.3rem;
-      border-radius: 14px;
-      border: 2px solid crimson;
-      background: black;
-      color: white;
-      box-shadow: 0 0 12px crimson;
-      user-select: text;
-      text-align: center;
-      font-weight: 600;
-      user-select: text;
-    }
-    input::placeholder {
-      color: #ccc;
-      font-style: italic;
-    }
-
-    #next-btn {
-      background: crimson;
-      border: none;
-      width: 100%;
-      padding: 22px 0;
-      font-weight: 900;
-      font-size: 1.7rem;
-      color: white;
-      border-radius: 14px;
-      cursor: pointer;
-      box-shadow: 0 0 28px crimson;
-      user-select: none;
-      margin-top: 16px;
-      transition: background-color 0.3s ease;
-      display: none;
-    }
-    #next-btn:hover {
-      background-color: #b30000;
-    }
-
-    #result {
-      text-align: center;
-      display: none;
-      user-select: none;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    #result img {
-      max-width: 160px;
-      margin-bottom: 24px;
-      filter: drop-shadow(0 0 18px crimson);
-      align-self: center;
-    }
-    #result h2 {
-      font-size: 2.4rem;
-      margin-bottom: 24px;
-      text-shadow: 0 0 20px crimson;
-    }
-    #result p {
-      font-size: 1.35rem;
-      line-height: 1.45;
-      margin: 0 12px 34px 12px;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-  </style>
+  }
+</style>
 </head>
-
 <body>
 
-  <!-- Espaço fixo para anúncios -->
-  <div id="ad-space"></div>
+<div id="container">
 
-  <button id="sound-control" title="Ativar / Desativar som">🔈</button>
+  <h1>Descubra o Dia da Sua Morte</h1>
 
-  <div id="container">
+  <img id="death-img-top" src="https://segredosdomundo.r7.com/wp-content/uploads/2021/12/10-anjos-da-morte-mais-conhecidos-na-biblia-e-na-mitologia-e1639504697683.jpg" alt="Anjo da Morte" />
 
-    <!-- Tela inicial -->
-    <div id="intro-screen">
-      <h1>Descubra o Dia da Sua Morte</h1>
-      <p>Será que você sabe quando vai morrer? Responda algumas perguntas simples e descubra seu destino.</p>
-      <button id="start-btn">Começar</button>
+  <!-- Tela inicial -->
+  <div id="intro-screen" class="screen active">
+    <p>Será que você sabe quando vai morrer?<br>Responda as perguntas e descubra seu destino.</p>
+    <button id="start-btn">Começar</button>
+  </div>
+
+  <!-- Tela perguntas -->
+  <div id="questions" class="screen">
+
+    <div class="question" data-step="1">
+      <h2>Você fuma?</h2>
+      <div class="options">
+        <button data-value="sim">Sim</button>
+        <button data-value="às vezes">Às vezes</button>
+        <button data-value="não">Não</button>
+      </div>
     </div>
 
-    <!-- Perguntas -->
-    <div id="questions">
-
-      <div class="question" data-step="1">
-        <p>Você fuma?</p>
-        <div class="options">
-          <button data-value="sim">Sim</button>
-          <button data-value="às vezes">Às vezes</button>
-          <button data-value="não">Não</button>
-        </div>
+    <div class="question" data-step="2">
+      <h2>Você já teve alguma doença grave, como diabetes ou pressão alta?</h2>
+      <div class="options">
+        <button data-value="sim">Sim</button>
+        <button data-value="não">Não</button>
       </div>
-
-      <div class="question" data-step="2">
-        <p>Qual o seu nome?</p>
-        <input type="text" id="name" placeholder="Digite seu nome aqui" autocomplete="off" />
-      </div>
-
-      <div class="question" data-step="3">
-        <p>Qual a sua data de nascimento?</p>
-        <input
-          type="text"
-          id="birthdate"
-          placeholder="Digite sua data de nascimento (dd/mm/aaaa)"
-          inputmode="numeric"
-          maxlength="10"
-          autocomplete="off"
-        />
-      </div>
-
-      <button id="next-btn">Próximo</button>
     </div>
 
-    <!-- Resultado -->
-    <div id="result">
-      <img src="https://segredosdomundo.r7.com/wp-content/uploads/2021/12/10-anjos-da-morte-mais-conhecidos-na-biblia-e-na-mitologia-e1639504697683.jpg" alt="Anjo da Morte" />
-      <h2>Seu destino está traçado...</h2>
-      <p id="result-text"></p>
-      <p id="result-details"></p>
+    <div class="question" data-step="3">
+      <h2>Você pratica exercícios físicos regularmente?</h2>
+      <div class="options">
+        <button data-value="sim">Sim</button>
+        <button data-value="não">Não</button>
+      </div>
     </div>
+
+    <div class="question" data-step="4">
+      <h2>Você costuma consumir álcool?</h2>
+      <div class="options">
+        <button data-value="sim">Sim</button>
+        <button data-value="não">Não</button>
+      </div>
+    </div>
+
+    <div class="question" data-step="5">
+      <h2>Alguém da sua família tem histórico de doenças cardíacas?</h2>
+      <div class="options">
+        <button data-value="sim">Sim</button>
+        <button data-value="não">Não</button>
+      </div>
+    </div>
+
+    <div class="question" data-step="6">
+      <h2>Qual o seu nome?</h2>
+      <input id="name" type="text" placeholder="Digite seu nome" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" />
+    </div>
+
+    <div class="question" data-step="7">
+      <h2>Digite sua data de nascimento</h2>
+      <input id="birthdate" type="tel" placeholder="dd/mm/aaaa" inputmode="numeric" pattern="[0-9/]*" maxlength="10" autocomplete="off" />
+    </div>
+
+    <button id="next-btn">Próximo</button>
 
   </div>
 
-  <audio id="background-audio" loop>
-    <source src="https://cdn.jsdelivr.net/gh/gabriellima2025/audio/musica_suspense_baixa.mp3" type="audio/mpeg" />
-    Seu navegador não suporta áudio.
-  </audio>
+  <!-- Tela resultado -->
+  <div id="result" class="screen">
+    <img id="death-img-bottom" src="https://segredosdomundo.r7.com/wp-content/uploads/2021/12/10-anjos-da-morte-mais-conhecidos-na-biblia-e-na-mitologia-e1639504697683.jpg" alt="Anjo da Morte" />
+    <h2>Seu destino está traçado</h2>
+    <p id="result-text"></p>
+    <p id="result-details"></p>
+    <button id="restart-btn">Refazer</button>
+  </div>
+
+</div>
+
+<!-- Espaço para anúncio -->
+<div id="ad-space">Anúncio aqui</div>
 
 <script>
-  const startBtn = document.getElementById('start-btn');
   const introScreen = document.getElementById('intro-screen');
+  const startBtn = document.getElementById('start-btn');
   const questions = document.getElementById('questions');
-  const questionDivs = document.querySelectorAll('.question');
   const nextBtn = document.getElementById('next-btn');
   const resultDiv = document.getElementById('result');
+  const restartBtn = document.getElementById('restart-btn');
   const resultText = document.getElementById('result-text');
   const resultDetails = document.getElementById('result-details');
-  const soundControl = document.getElementById('sound-control');
-  const bgAudio = document.getElementById('background-audio');
-
-  // Variáveis para armazenar respostas
-  const answers = {};
-
-  let currentStep = 0;
-
-  // Lista de causas comuns para a morte, baseado nas respostas
-  const causes = [
-    {cause: "parada cardíaca inesperada causada por hipertensão.", condition: (a) => a.fuma === "sim"},
-    {cause: "complicações de diabetes.", condition: (a) => a.fuma === "às vezes"},
-    {cause: "um acidente vascular cerebral (AVC).", condition: (a) => a.fuma === "não"},
-  ];
-
-  // Controle de nomes já usados (localStorage)
+  const questionDivs = [...document.querySelectorAll('.question')];
+  let currentStep = 1;
+  let answers = {};
   let usedNames = JSON.parse(localStorage.getItem('usedNames') || '[]');
 
-  // Função pra formatar data em dd/mm/aaaa e inserir barras automaticamente
-  function formatDate(value) {
-    let val = value.replace(/\D/g, '');
-    if(val.length > 8) val = val.slice(0,8);
-    if(val.length >= 5) {
-      return val.slice(0,2) + '/' + val.slice(2,4) + '/' + val.slice(4,8);
-    } else if(val.length >= 3) {
-      return val.slice(0,2) + '/' + val.slice(2,4);
-    } else if(val.length >= 1) {
-      return val;
-    }
-    return '';
-  }
-
-  // Atualiza o input da data para ter as barras enquanto digita
-  const birthInput = document.getElementById('birthdate');
-  birthInput.addEventListener('input', e => {
-    const cursorPos = e.target.selectionStart;
-    let oldLength = e.target.value.length;
-    e.target.value = formatDate(e.target.value);
-    // Ajusta cursor pra não pular as barras
-    let newLength = e.target.value.length;
-    let diff = newLength - oldLength;
-    if(diff > 0 && cursorPos === oldLength) {
-      e.target.selectionStart = e.target.selectionEnd = cursorPos + diff;
-    }
-  });
-
-  // Função para calcular idade aproximada pela data de nascimento
-  function calcAge(birth) {
-    let parts = birth.split('/');
-    if(parts.length !== 3) return null;
-    let day = parseInt(parts[0], 10);
-    let month = parseInt(parts[1], 10) - 1;
-    let year = parseInt(parts[2], 10);
-    let birthDate = new Date(year, month, day);
-    let today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    let m = today.getMonth() - birthDate.getMonth();
-    if(m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
-  }
-
-  // Função para avançar para próxima pergunta
+  // Mostrar etapa da pergunta
   function showStep(step) {
-    questionDivs.forEach(div => {
-      div.classList.remove('active');
-      if(parseInt(div.getAttribute('data-step')) === step) {
-        div.classList.add('active');
-      }
-    });
-    nextBtn.style.display = 'block';
     currentStep = step;
+    questionDivs.forEach(div => {
+      div.style.display = div.getAttribute('data-step') == step ? 'block' : 'none';
+    });
+    nextBtn.style.display = 'none';
+    if(step >= 6) {
+      nextBtn.textContent = (step === questionDivs.length) ? 'Ver Resultado' : 'Próximo';
+    } else {
+      nextBtn.textContent = 'Próximo';
+    }
   }
 
-  // Começar o questionário
-  startBtn.addEventListener('click', () => {
-    introScreen.style.display = 'none';
-    questions.style.display = 'flex';
+  // Iniciar
+  startBtn.onclick = () => {
+    introScreen.classList.remove('active');
+    introScreen.classList.add('hidden');
+    questions.classList.add('active');
     showStep(1);
-  });
-
-  // Controle para seleção das respostas (botões)
-  document.querySelectorAll('.options button').forEach(button => {
-    button.addEventListener('click', e => {
-      const parent = button.closest('.question');
-      parent.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
-      button.classList.add('selected');
-      // Salva resposta
-      if(parent.getAttribute('data-step') === '1') {
-        answers.fuma = button.getAttribute('data-value');
-      }
-      nextBtn.style.display = 'inline-block';
-    });
-  });
+  };
 
   // Botão próximo
-  nextBtn.addEventListener('click', () => {
-    if(currentStep === 1) {
-      // Verifica se respondeu
-      if(!answers.fuma) {
-        alert('Por favor, selecione uma opção para continuar.');
+  nextBtn.onclick = () => {
+    const activeQuestion = questionDivs.find(div => div.style.display === 'block');
+    if(!activeQuestion) return;
+
+    const step = parseInt(activeQuestion.getAttribute('data-step'));
+
+    if(step <= 5) {
+      // Perguntas com opções
+      const selectedBtn = activeQuestion.querySelector('button.selected');
+      if(!selectedBtn) {
+        alert('Por favor, selecione uma opção.');
         return;
       }
-      showStep(2);
-      nextBtn.style.display = 'none';
-      document.getElementById('name').focus();
-    } else if(currentStep === 2) {
-      const nameInput = document.getElementById('name');
-      const nameVal = nameInput.value.trim();
-      if(nameVal.length < 2) {
-        alert('Digite seu nome corretamente para continuar.');
-        nameInput.focus();
+      answers['q'+step] = selectedBtn.getAttribute('data-value');
+    } else if(step === 6) {
+      // Nome
+      const nameVal = document.getElementById('name').value.trim();
+      if(nameVal.length < 3) {
+        alert('Digite um nome válido com pelo menos 3 caracteres.');
         return;
       }
       if(usedNames.includes(nameVal.toLowerCase())) {
-        alert('Você já consultou com esse nome. Use outro para consultar novamente.');
-        nameInput.focus();
+        alert('Você já consultou com esse nome, use outro para consultar novamente.');
         return;
       }
-      answers.nome = nameVal;
-      showStep(3);
-      nextBtn.style.display = 'none';
-      birthInput.focus();
-    } else if(currentStep === 3) {
-      const birthVal = birthInput.value.trim();
-      if(!/^\d{2}\/\d{2}\/\d{4}$/.test(birthVal)) {
-        alert('Digite sua data de nascimento no formato dd/mm/aaaa');
-        birthInput.focus();
+      answers.name = nameVal;
+    } else if(step === 7) {
+      // Data nascimento
+      const bdate = document.getElementById('birthdate').value.trim();
+      if(!/^\d{2}\/\d{2}\/\d{4}$/.test(bdate)) {
+        alert('Digite uma data de nascimento válida no formato dd/mm/aaaa.');
         return;
       }
-      answers.dataNasc = birthVal;
-      // Processar resultado
+      answers.birthdate = bdate;
+    }
+
+    if(step < questionDivs.length) {
+      showStep(step + 1);
+    } else {
+      questions.classList.remove('active');
+      questions.classList.add('hidden');
       showResult();
     }
+  };
+
+  // Seleção de resposta
+  document.querySelectorAll('.options button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const parent = btn.parentElement;
+      parent.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      nextBtn.style.display = 'block';
+    });
   });
+
+  // Função para gerar causa da morte simples
+  function gerarCausa(ans) {
+    if(ans.q1 === 'sim' && ans.q4 === 'sim') return "Infarto causado por complicações do tabagismo e álcool.";
+    if(ans.q2 === 'sim') return "Complicações de diabetes ou pressão alta.";
+    if(ans.q5 === 'sim') return "Doença cardíaca hereditária.";
+    if(ans.q3 === 'não') return "Doença causada por sedentarismo.";
+    return "Causa natural relacionada ao envelhecimento.";
+  }
+
+  // Calcula idade e ano da morte
+  function calcularAnoMorte(birthdate, causa) {
+    const parts = birthdate.split('/');
+    const dia = parseInt(parts[0], 10);
+    const mes = parseInt(parts[1], 10) -1;
+    const anoNasc = parseInt(parts[2], 10);
+
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - anoNasc;
+    if (hoje.getMonth() < mes || (hoje.getMonth() === mes && hoje.getDate() < dia)) {
+      idade--;
+    }
+
+    let baseVida = 75;
+
+    if(causa.includes('tabagismo')) baseVida -= 15;
+    if(causa.includes('diabetes') || causa.includes('pressão')) baseVida -= 10;
+    if(causa.includes('hereditária')) baseVida -= 8;
+    if(causa.includes('sedentarismo')) baseVida -= 7;
+
+    let anoMorte = anoNasc + baseVida;
+    let idadeFinal = baseVida;
+
+    return {anoMorte, idadeFinal};
+  }
 
   // Mostrar resultado
   function showResult() {
-    questions.style.display = 'none';
-    resultDiv.style.display = 'flex';
+    const cause = gerarCausa(answers);
+    const anoData = calcularAnoMorte(answers.birthdate, cause);
 
-    usedNames.push(answers.nome.toLowerCase());
-    localStorage.setItem('usedNames', JSON.stringify(usedNames));
-
-    // Calcular idade atual e idade da morte
-    const idadeAtual = calcAge(answers.dataNasc);
-    if(idadeAtual === null) {
-      resultText.textContent = 'Erro ao calcular sua idade.';
-      resultDetails.textContent = '';
+    if(!anoData) {
+      alert('Erro ao calcular a data da morte. Verifique a data de nascimento.');
+      location.reload();
       return;
     }
-    // Definindo idade da morte (aleatória + base)
-    // Base: se fuma "sim" morre mais cedo, "às vezes" médio, "não" mais tarde
-    let idadeMorteBase = 70;
-    if(answers.fuma === 'sim') idadeMorteBase = 55;
-    else if(answers.fuma === 'às vezes') idadeMorteBase = 65;
 
-    // Ajuste aleatório de -5 a +10 anos
-    const randomAdj = Math.floor(Math.random() * 16) - 5;
-    let idadeMorte = idadeMorteBase + randomAdj;
-    if(idadeMorte < idadeAtual + 1) idadeMorte = idadeAtual + 1;
+    const {anoMorte, idadeFinal} = anoData;
 
-    // Ano da morte
-    const anoNasc = parseInt(answers.dataNasc.split('/')[2], 10);
-    const anoMorte = anoNasc + idadeMorte;
+    // Salva nome usado
+    usedNames.push(answers.name.toLowerCase());
+    localStorage.setItem('usedNames', JSON.stringify(usedNames));
 
-    // Causa da morte (simplificada)
-    let causa = '';
-    if(answers.fuma === 'sim') {
-      causa = 'uma parada cardíaca inesperada causada por hipertensão.';
-    } else if(answers.fuma === 'às vezes') {
-      causa = 'complicações de diabetes.';
-    } else {
-      causa = 'um acidente vascular cerebral (AVC).';
-    }
+    resultText.innerHTML = `${answers.name}, seu fim acontecerá exatamente assim:<br><strong>${cause}</strong>`;
+    resultDetails.innerHTML = `Você morrerá no dia <strong>${answers.birthdate}</strong>, com <strong>${idadeFinal} anos</strong>, no ano de <strong>${anoMorte}</strong>.`;
 
-    // Cidades próximas fixas
-    const cidades = ['Jaguaribe', 'Jaguaribara', 'Limoeiro', 'Itaiçaba', 'Aracati', 'Morada Nova'];
-    const cidade = cidades[Math.floor(Math.random() * cidades.length)];
-
-    // Monta texto
-    resultText.textContent = `${answers.nome}, seu fim acontecerá exatamente assim. Você terá ${causa}`;
-    resultDetails.textContent = `Data e hora exatas da morte: 00:00h do dia 31/12/${anoMorte}. Você terá ${idadeMorte} anos. Local da morte: ${cidade}.`;
-
-    // Scroll para resultado (em caso de celular)
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    resultDiv.classList.add('active');
+    resultDiv.classList.remove('hidden');
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
-  // Som ambiente
-  let audioPlaying = false;
-  bgAudio.volume = 0.15; // volume baixo
-  bgAudio.play().catch(() => {
-    // Som só toca após interação, botão ativa
-  });
+  // Reiniciar
+  restartBtn.onclick = () => {
+    resultDiv.classList.remove('active');
+    resultDiv.classList.add('hidden');
+    introScreen.classList.remove('hidden');
+    introScreen.classList.add('active');
+    answers = {};
+    questionDivs.forEach(div => {
+      div.style.display = 'none';
+      const selected = div.querySelector('button.selected');
+      if(selected) selected.classList.remove('selected');
+      const input = div.querySelector('input');
+      if(input) input.value = '';
+    });
+    nextBtn.style.display = 'none';
+  };
 
-  soundControl.addEventListener('click', () => {
-    if(audioPlaying){
-      bgAudio.pause();
-      audioPlaying = false;
-      soundControl.textContent = '🔈';
-    } else {
-      bgAudio.play();
-      audioPlaying = true;
-      soundControl.textContent = '🔊';
+  // Máscara para data dd/mm/aaaa
+  const birthInput = document.getElementById('birthdate');
+  birthInput.addEventListener('input', (e) => {
+    let val = e.target.value.replace(/\D/g, '').slice(0,8);
+    if(val.length >= 5) {
+      val = val.replace(/^(\d{2})(\d{2})(\d{0,4}).*/, '$1/$2/$3');
+    } else if(val.length >= 3) {
+      val = val.replace(/^(\d{2})(\d{0,2}).*/, '$1/$2');
     }
+    e.target.value = val;
   });
-
-  // Centraliza o container verticalmente também quando o conteúdo mudar
-  function centerContainer() {
-    const container = document.getElementById('container');
-    const vh = window.innerHeight;
-    const adHeight = document.getElementById('ad-space').offsetHeight;
-    container.style.minHeight = (vh - adHeight - 40) + 'px';
-  }
-  window.addEventListener('resize', centerContainer);
-  window.addEventListener('load', centerContainer);
-  centerContainer();
 
 </script>
-
 </body>
 </html>
+
